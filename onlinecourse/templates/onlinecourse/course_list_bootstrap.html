@@ -2,64 +2,248 @@
 <html lang="en">
 <head>
     {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <meta charset="UTF-8">
-    <title>Online Courses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn online with expert-led courses. Explore categories, track progress, and grow your skills.">
+    <title>Online Courses | Learn Anywhere, Anytime</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/7d12345abc.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: #212529;
+        }
+
+        .navbar {
+            background: #fff;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #0d6efd !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd, #6610f2);
+            color: #fff;
+            text-align: center;
+            padding: 100px 20px 80px;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+            font-size: 2.8rem;
+        }
+
+        .hero-section p {
+            font-size: 1.15rem;
+            max-width: 650px;
+            margin: 0 auto 25px;
+        }
+
+        .category-filter {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 15px 25px;
+            margin-top: -40px;
+        }
+
+        .category-filter select {
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        /* Course cards */
+        .card {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+        }
+
+        .progress-bar {
+            background-color: #0d6efd;
+        }
+
+        footer {
+            background-color: #0d6efd;
+            color: #fff;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 60px;
+        }
+
+        [data-aos] {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-in-out;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation bar -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                  <a class="navbar-brand" href="#">Online Course</a>
-            </div>
-            <ul class="nav navbar-nav navbar-right">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg py-3">
+    <div class="container">
+        <a class="navbar-brand" href="#"><i class="fas fa-graduation-cap me-2"></i>Online Course</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
                 {% if user.is_authenticated %}
-                <li>
-                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                    <a class="btn btn-link" href="{% url 'onlinecourse:logout' %}">Logout</a>
-                </li>
+                    <li class="nav-item me-3 text-secondary small">
+                        <i class="fas fa-user-circle me-1"></i>
+                        Welcome, {{ user.first_name }} ({{ user.username }})
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'onlinecourse:logout' %}" class="btn btn-outline-primary">Logout</a>
+                    </li>
                 {% else %}
-                <li>
-                    <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Username" name="username" >
-                            <input type="password" class="form-control" placeholder="Username" name="psw" >
-                            <button class="btn btn-primary" type="submit">Login</button>
-                            <a class="btn btn-link" href="{% url 'onlinecourse:registration' %}">Sign Up</a>
-                        </div>
-                    </form>
-                </li>
+                    <li class="nav-item">
+                        <a href="{% url 'onlinecourse:login' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'onlinecourse:registration' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-user-plus me-1"></i> Sign Up
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- Page content -->
-    {% if course_list %}
-        <div class="container">
-            <div class="card-deck">
-                {% for course in course_list %}
-                         <div class="card" style="width: 36rem;">
-                          <img class="card-img-left" src="{{MEDIA_URL}}/{{ course.image }}" width="240px" height="240px"
-                               alt="Course image">
-                          <div class="card-body bg-light">
-                              <h5 class="card-title">{{ course.name }}, <span class="text-success">
-                                  {{ course.total_enrollment}} enrolled</span></h5>
-                            <p class="card-text">{{ course.description}}</p>
-                            <form action="{% url 'onlinecourse:enroll' course.id %}" method="post">
-                                  {% csrf_token %}
-                                  <input class="btn btn-primary"  type="submit"
-                                         value="{% if course.is_enrolled %}Enter{% else %}Enroll{% endif %} ">
-                            </form>
-                          </div>
-                        </div>
-                {% endfor %}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1>Learn, Grow, and Achieve Your Goals</h1>
+        <p>Explore a wide range of online courses across multiple categories and track your progress effortlessly.</p>
+        <a href="#courses" class="btn btn-light text-primary fw-semibold px-4 py-2">Browse Courses</a>
+    </div>
+</section>
+
+<!-- Category Filter -->
+<div class="container category-filter shadow-sm">
+    <form method="get" action="">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-2 mb-md-0">
+                <label for="category" class="form-label fw-semibold mb-1">Filter by Category</label>
+                <select name="category" id="category" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="m-0 text-muted small">Showing <strong>{{ course_list|length }}</strong> courses</p>
             </div>
         </div>
+    </form>
+</div>
+
+<!-- Courses Section -->
+<section id="courses" class="container my-5">
+    {% if course_list %}
+        <div class="row">
+            {% for course in course_list %}
+                <div class="col-md-4 mb-4" data-aos>
+                    <div class="card h-100">
+                        <img src="{{MEDIA_URL}}/{{ course.image }}" alt="{{ course.name }}" class="card-img-top">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ course.name }}</h5>
+                            <p class="text-muted small mb-1">
+                                <i class="fas fa-folder me-1 text-primary"></i> {{ course.category.name }}
+                            </p>
+                            <p class="text-success small mb-2">
+                                <i class="fas fa-user-graduate me-1"></i> {{ course.total_enrollment }} students
+                            </p>
+                            <p class="card-text text-muted small flex-grow-1">{{ course.description|truncatewords:20 }}</p>
+
+                            {% if course.is_enrolled %}
+                                <div class="progress my-2">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ course.progress|default:0 }}%;" 
+                                         aria-valuenow="{{ course.progress|default:0 }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <small class="text-muted">Progress: {{ course.progress|default:0 }}%</small>
+                            {% endif %}
+
+                            <form action="{% url 'onlinecourse:enroll' course.id %}" method="post" class="mt-3">
+                                {% csrf_token %}
+                                <input class="btn btn-primary w-100" type="submit" 
+                                       value="{% if course.is_enrolled %}Enter Course{% else %}Enroll Now{% endif %}">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>No courses are available.</p>
+        <p class="text-center mt-5 text-muted">No courses available in this category.</p>
     {% endif %}
+</section>
+
+<!-- Footer -->
+<footer>
+    © {{ now|date:"Y" }} <strong>Online Course Platform</strong> — Learn anywhere, anytime.
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Simple AOS-like fade animation
+    document.addEventListener("scroll", () => {
+        document.querySelectorAll("[data-aos]").forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) el.classList.add("aos-animate");
+        });
+    });
+</script>
 </body>
 </html>
