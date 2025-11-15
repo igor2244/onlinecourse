@@ -5,6 +5,7 @@ asgiref==3.10.0
 attrs==25.4.0
 click==8.0.4
 contextvars==2.4
+dj-database-url==3.0.1
 Django==4.2.3
 django-admin-honeypot-updated-2021==1.2.0
 django-environ==0.12.0
@@ -18,6 +19,7 @@ MarkupSafe==3.0.3
 multidict==4.5.0
 Pillow==10.0.0
 propcache==0.4.1
+psycopg2-binary==2.9.11
 python-ipware==3.0.0
 setuptools==80.9.0
 sqlparse==0.5.3
