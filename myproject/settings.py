@@ -36,9 +36,9 @@ else:
 
 
 # <HINT> add your cloud host here
-ALLOWED_HOSTS = ["https://onlinecourse-nf4v.onrender.com"]
+ALLOWED_HOSTS = ["onlinecourse-nf4v.onrender.com"]
 
-CSRF_TRUSTED_ORIGINS = ['https://*.cognitiveclass.ai']
+CSRF_TRUSTED_ORIGINS = ['https://onlinecourse-nf4v.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
