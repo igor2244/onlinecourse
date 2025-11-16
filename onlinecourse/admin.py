@@ -41,3 +41,8 @@ admin.site.register(Learner)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice)
 admin.site.register(Submission)
+
+
+admin.site.site_header = "OnlineCourse Administration"
+admin.site.site_title = "OnlineCourse Admin Portal"
+admin.site.index_title = "Bienvenue dans l'espace administrateur"
