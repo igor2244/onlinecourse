@@ -36,7 +36,8 @@ else:
 
 
 # <HINT> add your cloud host here
-ALLOWED_HOSTS = ["onlinecourse-nf4v.onrender.com"]
+
+ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = ['https://onlinecourse-nf4v.onrender.com']
 
@@ -96,7 +97,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-POSTGRES_LOCALLY = False
+POSTGRES_LOCALLY = True
 if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
     DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
